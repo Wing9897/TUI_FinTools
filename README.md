@@ -6,12 +6,12 @@ A collection of lightweight terminal-based financial monitoring tools built with
 
 | Tool | File | Description |
 |------|------|-------------|
-| 🏦 Binance P2P | `C2Cbinace.py` | Monitor Binance C2C/P2P exchange rates with price alerts |
-| 🔮 Polymarket | `polymarket_tui.py` | Search and track prediction market odds |
-| 💰 Bitfinex Lending | `loanbot_tui.py` | Automated margin funding bot (dry-run & live) |
-| 💱 Forex Rates | `forex_tui.py` | Real-time fiat currency exchange rates |
-| 📈 Crypto Prices | `crypto_tui.py` | Top 40 cryptocurrency spot prices from Binance |
-| 🇺🇸 US Stocks | `stocks_tui.py` | Major indices & stock quotes from Yahoo Finance |
+| 🏦 Binance P2P | `binance_p2p.py` | Monitor Binance C2C/P2P exchange rates with price alerts |
+| 🔮 Polymarket | `polymarket.py` | Search and track prediction market odds |
+| 💰 Bitfinex Lending | `bitfinex_lending.py` | Automated margin funding bot (dry-run & live) |
+| 💱 Forex Rates | `forex.py` | Real-time fiat currency exchange rates |
+| 📈 Crypto Prices | `crypto_prices.py` | Top 40 cryptocurrency spot prices from Binance |
+| 🇺🇸 US Stocks | `us_stocks.py` | Major indices & stock quotes from Yahoo Finance |
 
 ## Screenshots
 
@@ -35,12 +35,12 @@ pip install textual requests aiohttp
 Each tool is a standalone single-file application. Just run:
 
 ```bash
-python C2Cbinace.py          # Binance P2P monitor
-python polymarket_tui.py     # Polymarket prediction markets
-python loanbot_tui.py        # Bitfinex lending bot
-python forex_tui.py          # Fiat exchange rates
-python crypto_tui.py         # Crypto spot prices
-python stocks_tui.py         # US stock indices
+python binance_p2p.py          # Binance P2P monitor
+python polymarket.py           # Polymarket prediction markets
+python bitfinex_lending.py     # Bitfinex lending bot
+python forex.py                # Fiat exchange rates
+python crypto_prices.py        # Crypto spot prices
+python us_stocks.py            # US stock indices
 ```
 
 ### Bitfinex Lending Bot Setup
@@ -48,7 +48,7 @@ python stocks_tui.py         # US stock indices
 ```bash
 cp loanbot_data/config.example.toml loanbot_data/config.toml
 # Edit config.toml with your settings
-python loanbot_tui.py
+python bitfinex_lending.py
 ```
 
 ## Keyboard Shortcuts
