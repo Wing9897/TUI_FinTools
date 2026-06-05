@@ -1,0 +1,75 @@
+# ============================================================
+# Bitfinex 放貸機械人 — 設定檔
+# 複製此檔案為 config.toml 然後修改數值。
+# ============================================================
+
+# --- 模式 ---
+# true = 只模擬（唔會動你嘅錢）
+# false = 真正向 Bitfinex 下單（真金白銀！）
+dry_run = true
+
+# Bitfinex API 金鑰（dry_run = false 時必填）
+# 去 https://setting.bitfinex.com/api#new-key 生成
+# 權限只需要勾選：Funding → Read + Write
+api_key = ""
+api_secret = ""
+
+# --- 目標幣種 ---
+# Bitfinex 嘅 funding symbol：
+#   fUST = USDT
+#   fUSD = USD
+#   fBTC = BTC
+funding_symbol = "fUST"
+
+# --- 時間間隔 ---
+# 每幾秒去 Bitfinex 抓一次最新 order book（15–600）
+polling_interval_seconds = 60
+
+# 每幾秒做一次「要唔要掛單」嘅決策（10–3600）
+decision_interval_seconds = 60
+
+# 如果最新 order book 超過呢個秒數就當「過期」，唔掛單（15–3600）
+snapshot_freshness_seconds = 300
+
+# --- 策略 ---
+[strategy]
+# 三種模式：
+#   "ask_book_nth"  = 取 ask 側第 N 低嘅利率（固定 period）
+#   "frr_delta"     = 用 FRR 加一個 delta（固定 period）
+#   "best_period"   = 自動掃描所有 period 嘅 bid rate，揀年化最高嗰個（推薦）
+mode = "best_period"
+
+# ask_book_nth 模式：N = 幾（1–25）
+# N=1 最容易成交但利率最低；N 越大利率越高但可能掛唔到
+# n = 3
+
+# frr_delta 模式：delta 值（日利率，用引號包住）
+# 例如 "0.00001" = 比 FRR 高 0.001%/日
+# delta = "0.00001"
+
+# --- 掛單參數 ---
+# 最低利率門檻（日利率）：計出嚟低過呢個值就唔掛
+# 例如 "0.0001" = 年化約 3.65%
+min_rate_threshold = "0.0001"
+
+# 每筆掛單金額（USDT）
+offer_amount = "150"
+
+# 借出天數（2–120）
+# 2 天最靈活（到期後本金自動釋放）
+# 天數越長通常利率越高但資金鎖定越久
+period_days = 2
+
+# --- 風控 ---
+# 最大總曝險：所有掛單 + 活躍貸款加埋唔可以超過呢個數
+max_total_amount = "1000"
+
+# 自動取消：掛咗超過幾分鐘仲未成交就取消（0 = 永不取消）
+cancel_after_minutes = 30
+
+# --- 本地設定 ---
+# 資料庫檔案路徑（自動建立）
+db_path = "./loanbot_data/loanbot.sqlite"
+
+# Dashboard 網頁 port（瀏覽器開 http://127.0.0.1:8080）
+web_port = 8080
