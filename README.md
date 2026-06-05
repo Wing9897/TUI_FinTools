@@ -15,7 +15,9 @@ A collection of lightweight terminal-based financial monitoring tools built with
 
 ## Screenshots
 
-*Coming soon*
+![Binance P2P](screenshots/binance_p2p.png)
+
+![Polymarket](screenshots/polymarket.png)
 
 ## Requirements
 
