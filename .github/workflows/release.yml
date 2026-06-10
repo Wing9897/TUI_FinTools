@@ -1,0 +1,82 @@
+name: Build & Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build executables
+        run: |
+          pyinstaller --onefile --name crypto_supply crypto_supply.py
+          pyinstaller --onefile --name stock_supply stock_supply.py
+          pyinstaller --onefile --name crypto_prices crypto_prices.py
+          pyinstaller --onefile --name us_stocks us_stocks.py
+          pyinstaller --onefile --name binance_p2p binance_p2p.py
+          pyinstaller --onefile --name polymarket polymarket.py
+          pyinstaller --onefile --name bitfinex_lending bitfinex_lending.py
+          pyinstaller --onefile --name forex forex.py
+
+      - name: Generate version tag
+        id: version
+        run: |
+          $date = Get-Date -Format "yyyy.MM.dd"
+          $count = (git tag -l "${date}*").Count
+          if ($count -eq 0) { $tag = "v${date}" } else { $tag = "v${date}.${count}" }
+          echo "tag=$tag" >> $env:GITHUB_OUTPUT
+          echo "Generated tag: $tag"
+
+      - name: Create tag
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git tag ${{ steps.version.outputs.tag }}
+          git push origin ${{ steps.version.outputs.tag }}
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: Release ${{ steps.version.outputs.tag }}
+          body: |
+            ## TUI FinTools Release
+
+            Auto-built executables for Windows. Download and run directly (no Python needed).
+
+            ### Tools included:
+            - `crypto_supply.exe` — 加密貨幣供應量與標準化價格 (Top 50)
+            - `stock_supply.exe` — 美股供應量與標準化價格 (150 stocks)
+            - `crypto_prices.exe` — 加密貨幣現貨價格
+            - `us_stocks.exe` — 美股即時報價
+            - `binance_p2p.exe` — 幣安 P2P 報價
+            - `polymarket.exe` — Polymarket 預測市場
+            - `bitfinex_lending.exe` — Bitfinex 借貸利率
+            - `forex.exe` — 外匯報價
+          files: |
+            dist/crypto_supply.exe
+            dist/stock_supply.exe
+            dist/crypto_prices.exe
+            dist/us_stocks.exe
+            dist/binance_p2p.exe
+            dist/polymarket.exe
+            dist/bitfinex_lending.exe
+            dist/forex.exe
