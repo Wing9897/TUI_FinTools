@@ -34,6 +34,8 @@ COLORS = [
     "#ff8c00", "#00ff7f", "#1e90ff", "#ff69b4", "#7b68ee",
     "#ffd700", "#00ced1", "#ff6347", "#adff2f", "#da70d6",
     "#40e0d0", "#f0e68c", "#87ceeb", "#dda0dd", "#98fb98",
+    "#66cdaa", "#ffa07a", "#8fbc8f", "#b0c4de", "#ffb6c1",
+    "#deb887", "#5f9ea0", "#9acd32", "#ba55d3", "#f08080",
 ]
 
 
@@ -128,16 +130,16 @@ def sort_coins(coins: list[dict], mode: str) -> list[dict]:
 
 
 def fetch_market_data() -> list[dict] | None:
-    """從 CoinGecko 獲取前 30 名加密貨幣的市場資料。
+    """從 CoinGecko 獲取前 50 名加密貨幣的市場資料。
 
     向 /coins/markets 端點發送 GET 請求，參數：
-    vs_currency=usd, order=market_cap_desc, per_page=30, page=1。
+    vs_currency=usd, order=market_cap_desc, per_page=50, page=1。
     逾時設為 10 秒。失敗時等待 3 秒重試一次，兩次失敗回傳 None。
     """
     params = {
         "vs_currency": "usd",
         "order": "market_cap_desc",
-        "per_page": 30,
+        "per_page": 50,
         "page": 1,
     }
     for attempt in range(2):

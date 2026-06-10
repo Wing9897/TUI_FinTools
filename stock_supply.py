@@ -20,33 +20,168 @@ from yahooquery import Ticker
 
 # ===== 常數 =====
 
-# 監控的股票/指數
+# 監控的股票/指數（150 支熱門美股）
 SYMBOLS = [
-    # 指數 ETF
-    ("SPY", "S&P 500 ETF"),
-    ("QQQ", "Nasdaq 100 ETF"),
-    ("DIA", "Dow Jones ETF"),
-    ("IWM", "Russell 2000 ETF"),
-    ("VIX", "恐慌指數 VIX"),
-    # 科技巨頭
-    ("AAPL", "Apple"),
-    ("MSFT", "Microsoft"),
-    ("GOOGL", "Google"),
-    ("AMZN", "Amazon"),
-    ("NVDA", "Nvidia"),
+    # ===== 指數 ETF =====
+    ("SPY", "標普500 ETF"),
+    ("QQQ", "納斯達克100"),
+    ("DIA", "道瓊 ETF"),
+    ("IWM", "羅素2000"),
+    ("VIX", "恐慌指數"),
+    # ===== 科技 =====
+    ("AAPL", "蘋果"),
+    ("MSFT", "微軟"),
+    ("GOOGL", "谷歌"),
+    ("AMZN", "亞馬遜"),
+    ("NVDA", "輝達"),
     ("META", "Meta"),
-    ("TSLA", "Tesla"),
-    # 金融/其他
-    ("JPM", "JP Morgan"),
+    ("TSLA", "特斯拉"),
+    ("AVGO", "博通"),
+    ("ORCL", "甲骨文"),
+    ("CRM", "Salesforce"),
+    ("AMD", "超微半導體"),
+    ("NFLX", "網飛"),
+    ("ADBE", "Adobe"),
+    ("INTC", "英特爾"),
+    ("CSCO", "思科"),
+    ("QCOM", "高通"),
+    ("AMAT", "應材"),
+    ("MU", "美光"),
+    ("NOW", "ServiceNow"),
+    ("UBER", "優步"),
+    ("SHOP", "Shopify"),
+    ("PLTR", "Palantir"),
+    ("PANW", "Palo Alto"),
+    ("CRWD", "CrowdStrike"),
+    ("SNOW", "Snowflake"),
+    ("ABNB", "Airbnb"),
+    ("SQ", "Block"),
+    ("DDOG", "Datadog"),
+    ("ZS", "Zscaler"),
+    ("NET", "Cloudflare"),
+    ("TEAM", "Atlassian"),
+    ("WDAY", "Workday"),
+    ("INTU", "Intuit"),
+    ("SNPS", "新思科技"),
+    ("CDNS", "益華電腦"),
+    ("KLAC", "科磊"),
+    ("LRCX", "科林研發"),
+    ("MRVL", "Marvell"),
+    ("ON", "安森美"),
+    ("ARM", "ARM"),
+    ("SMCI", "超微電腦"),
+    ("DELL", "戴爾"),
+    ("HPE", "慧與科技"),
+    ("IBM", "IBM"),
+    ("TXN", "德州儀器"),
+    # ===== 金融 =====
+    ("JPM", "摩根大通"),
     ("V", "Visa"),
-    ("WMT", "Walmart"),
-    # 加密相關
+    ("MA", "萬事達卡"),
+    ("BAC", "美國銀行"),
+    ("GS", "高盛"),
+    ("MS", "摩根士丹利"),
+    ("WFC", "富國銀行"),
+    ("C", "花旗"),
+    ("AXP", "美國運通"),
+    ("BLK", "貝萊德"),
+    ("SCHW", "嘉信理財"),
+    ("BX", "黑石"),
+    ("KKR", "KKR"),
+    ("COF", "第一資本"),
+    ("CME", "芝商所"),
+    ("ICE", "洲際交易所"),
+    # ===== 醫療/生技 =====
+    ("LLY", "禮來"),
+    ("UNH", "聯合健康"),
+    ("JNJ", "嬌生"),
+    ("ABBV", "艾伯維"),
+    ("MRK", "默沙東"),
+    ("PFE", "輝瑞"),
+    ("TMO", "賽默飛"),
+    ("ABT", "亞培"),
+    ("AMGN", "安進"),
+    ("GILD", "吉利德"),
+    ("VRTX", "福泰製藥"),
+    ("REGN", "再生元"),
+    ("ISRG", "直覺手術"),
+    ("MDT", "美敦力"),
+    ("BMY", "必治妥"),
+    ("MRNA", "莫德納"),
+    # ===== 消費 =====
+    ("WMT", "沃爾瑪"),
+    ("COST", "好市多"),
+    ("HD", "家得寶"),
+    ("PG", "寶潔"),
+    ("KO", "可口可樂"),
+    ("PEP", "百事"),
+    ("MCD", "麥當勞"),
+    ("NKE", "耐吉"),
+    ("SBUX", "星巴克"),
+    ("TGT", "塔吉特"),
+    ("LOW", "勞氏"),
+    ("EL", "雅詩蘭黛"),
+    ("CL", "高露潔"),
+    ("DIS", "迪士尼"),
+    ("CMCSA", "康卡斯特"),
+    ("T", "AT&T"),
+    ("VZ", "威訊"),
+    ("TMUS", "T-Mobile"),
+    # ===== 工業/能源/材料 =====
+    ("XOM", "埃克森美孚"),
+    ("CVX", "雪佛龍"),
+    ("COP", "康菲石油"),
+    ("SLB", "斯倫貝謝"),
+    ("LIN", "林德"),
+    ("CAT", "卡特彼勒"),
+    ("DE", "迪爾"),
+    ("HON", "霍尼韋爾"),
+    ("UNP", "聯合太平洋"),
+    ("RTX", "雷神"),
+    ("LMT", "洛馬"),
+    ("BA", "波音"),
+    ("GE", "奇異"),
+    ("MMM", "3M"),
+    ("FDX", "聯邦快遞"),
+    ("UPS", "優比速"),
+    # ===== 半導體/電動車 =====
+    ("TSM", "台積電"),
+    ("ASML", "阿斯麥"),
+    ("RIVN", "Rivian"),
+    ("LCID", "Lucid"),
+    ("F", "福特"),
+    ("GM", "通用汽車"),
+    # ===== 加密相關 =====
     ("COIN", "Coinbase"),
-    ("MSTR", "MicroStrategy"),
-    ("MARA", "Marathon Digital"),
-    # 港股 ADR
+    ("MSTR", "Strategy"),
+    ("MARA", "Marathon"),
+    ("RIOT", "Riot"),
+    ("CLSK", "CleanSpark"),
+    ("HUT", "Hut 8"),
+    # ===== 中概 ADR =====
     ("BABA", "阿里巴巴"),
     ("PDD", "拼多多"),
+    ("JD", "京東"),
+    ("BIDU", "百度"),
+    ("NIO", "蔚來"),
+    ("XPEV", "小鵬汽車"),
+    ("LI", "理想汽車"),
+    ("BILI", "嗶哩嗶哩"),
+    ("TME", "騰訊音樂"),
+    # ===== 其他熱門 =====
+    ("BRK-B", "波克夏B"),
+    ("PYPL", "PayPal"),
+    ("ROKU", "Roku"),
+    ("SPOT", "Spotify"),
+    ("ZM", "Zoom"),
+    ("SNAP", "Snap"),
+    ("PINS", "Pinterest"),
+    ("RBLX", "Roblox"),
+    ("U", "Unity"),
+    ("PATH", "UiPath"),
+    ("SOFI", "SoFi"),
+    ("HOOD", "Robinhood"),
+    ("DKNG", "DraftKings"),
 ]
 
 REFRESH_OPTIONS = [15, 30, 60, 120, 300]  # 秒
@@ -63,10 +198,29 @@ COLORS = [
     "#ff8c00", "#00ff7f", "#1e90ff", "#ff69b4", "#7b68ee",
     "#ffd700", "#00ced1", "#ff6347", "#adff2f", "#da70d6",
     "#40e0d0", "#f0e68c", "#87ceeb", "#dda0dd", "#98fb98",
+    "#66cdaa", "#ffa07a", "#8fbc8f", "#b0c4de", "#ffb6c1",
+    "#deb887", "#5f9ea0", "#9acd32", "#ba55d3", "#f08080",
 ]
 
 
 # ===== 工具函式 =====
+
+
+def _display_width(s: str) -> int:
+    """計算字串在終端的顯示寬度（中文字佔 2 格）。"""
+    width = 0
+    for ch in s:
+        if '\u4e00' <= ch <= '\u9fff' or '\u3000' <= ch <= '\u303f' or '\uff00' <= ch <= '\uffef':
+            width += 2
+        else:
+            width += 1
+    return width
+
+
+def _pad_right(s: str, width: int) -> str:
+    """右補空格使字串顯示寬度達到 width。"""
+    pad = width - _display_width(s)
+    return s + " " * max(0, pad)
 
 
 def calculate_normalized_price(market_cap: float | None) -> float | None:
@@ -356,9 +510,9 @@ class StockSupplyApp(App):
             f"每 {REFRESH_OPTIONS[self.refresh_index]} 秒刷新 | "
             f"{sort_label} | "
             f"共 {len(sorted_data)} 股[/bold white]",
-            "[dim]" + "─" * 100 + "[/dim]",
-            f"[dim] {'排名':<4}  {'代碼':<6}  {'名稱':<24}  {'當前價格':>10}  {'流通股數':>8}  {'市值':>10}  {'標準化價格 (1.0B)':>18}[/dim]",
-            "[dim]" + "─" * 100 + "[/dim]",
+            "[dim]" + "─" * 95 + "[/dim]",
+            "[dim]  #    Code    Name        Price    Shares     MarketCap    Normalized (1.0B)[/dim]",
+            "[dim]" + "─" * 95 + "[/dim]",
         ])
 
         for i, stock in enumerate(sorted_data):
@@ -373,10 +527,20 @@ class StockSupplyApp(App):
             # 代碼
             symbol = stock.get("symbol", "N/A")
 
-            # 名稱（截斷過長名稱）
+            # 名稱（截斷過長名稱，考慮中文寬度）
             name = stock.get("name") or "N/A"
-            if len(name) > 22:
-                name = name[:20] + ".."
+            if _display_width(name) > 10:
+                # 截斷到顯示寬度 8 + ".."
+                truncated = ""
+                w = 0
+                for ch in name:
+                    cw = 2 if ('\u4e00' <= ch <= '\u9fff' or '\u3000' <= ch <= '\u303f' or '\uff00' <= ch <= '\uffef') else 1
+                    if w + cw > 8:
+                        break
+                    truncated += ch
+                    w += cw
+                name = truncated + ".."
+            name_padded = _pad_right(name, 10)
 
             # 當前價格
             price_str = format_price(stock.get("regularMarketPrice"))
@@ -395,9 +559,9 @@ class StockSupplyApp(App):
                 normalized_display = "N/A"
 
             lines.append(
-                f"[{row_color}] {rank_str:<4}  {symbol:<6}  {name:<24}  "
-                f"{price_str:>10}  {supply_str:>8}  {market_cap_str:>10}  "
-                f"{normalized_display:>18}[/{row_color}]"
+                f"[{row_color}]{rank_str:>3}  {symbol:<6}  {name_padded}  "
+                f"{price_str:>10}  {supply_str:>8}  {market_cap_str:>12}  "
+                f"{normalized_display:>20}[/{row_color}]"
             )
 
         content = "\n".join(lines)
