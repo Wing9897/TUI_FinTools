@@ -283,9 +283,9 @@ class CryptoSupplyApp(App):
             f"每 {REFRESH_OPTIONS[self.refresh_index]} 秒刷新 | "
             f"{sort_label} | "
             f"共 {len(sorted_data)} 幣[/bold white]",
-            "[dim]" + "─" * 90 + "[/dim]",
-            "[dim] 排名   代碼       名稱             當前價格         供應量        市值            標準化價格 (供應量)[/dim]",
-            "[dim]" + "─" * 90 + "[/dim]",
+            "[dim]" + "─" * 100 + "[/dim]",
+            "[dim] 排名   代碼       名稱             當前價格         供應量        市值            標準化價格 (供應量)  倍率[/dim]",
+            "[dim]" + "─" * 100 + "[/dim]",
         ])
 
         for i, coin in enumerate(sorted_data):
@@ -319,10 +319,19 @@ class CryptoSupplyApp(App):
             else:
                 normalized_display = "N/A"
 
+            # 倍率：真實價格 / 標準化價格 = 流通供應量 / 1億
+            price_val = coin.get("current_price")
+            norm_val = coin.get("normalized_price")
+            if price_val and norm_val and norm_val > 0:
+                ratio = price_val / norm_val
+                ratio_str = f"{ratio:.2f}x"
+            else:
+                ratio_str = "N/A"
+
             lines.append(
                 f"[{row_color}] {rank_str:<5} {symbol_str:<9} {name:<16} "
                 f"{price_str:>14}  {supply_str:>10}  {market_cap_str:>14}  "
-                f"{normalized_display:>22}[/{row_color}]"
+                f"{normalized_display:>22}  {ratio_str:>7}[/{row_color}]"
             )
 
         content = "\n".join(lines)
