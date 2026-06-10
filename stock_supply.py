@@ -510,9 +510,9 @@ class StockSupplyApp(App):
             f"每 {REFRESH_OPTIONS[self.refresh_index]} 秒刷新 | "
             f"{sort_label} | "
             f"共 {len(sorted_data)} 股[/bold white]",
-            "[dim]" + "─" * 95 + "[/dim]",
-            "[dim]  #    Code    Name        Price    Shares     MarketCap    Normalized (1.0B)[/dim]",
-            "[dim]" + "─" * 95 + "[/dim]",
+            "[dim]" + "─" * 105 + "[/dim]",
+            "[dim]  #    Code    Name        Price    Shares     MarketCap    Normalized (1.0B)  Ratio[/dim]",
+            "[dim]" + "─" * 105 + "[/dim]",
         ])
 
         for i, stock in enumerate(sorted_data):
@@ -558,10 +558,19 @@ class StockSupplyApp(App):
             else:
                 normalized_display = "N/A"
 
+            # 倍率：真實價格 / 標準化價格 = 流通股數 / 1B
+            price_val = stock.get("regularMarketPrice")
+            norm_val = stock.get("normalized_price")
+            if price_val and norm_val and norm_val > 0:
+                ratio = price_val / norm_val
+                ratio_str = f"{ratio:.2f}x"
+            else:
+                ratio_str = "N/A"
+
             lines.append(
                 f"[{row_color}]{rank_str:>3}  {symbol:<6}  {name_padded}  "
                 f"{price_str:>10}  {supply_str:>8}  {market_cap_str:>12}  "
-                f"{normalized_display:>20}[/{row_color}]"
+                f"{normalized_display:>20}  {ratio_str:>7}[/{row_color}]"
             )
 
         content = "\n".join(lines)
